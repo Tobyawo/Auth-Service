@@ -10,6 +10,9 @@ services:
 networks:
   default:
     external:
+      name: gm-services-docker-network
+  secondary_network:
+    external:
       name: ea-services-docker-network
 
 #Network: Make sure the network ea-services-docker-network is created and available:
