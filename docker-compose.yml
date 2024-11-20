@@ -1,0 +1,16 @@
+services:
+  ea-access-service:
+    container_name: auth-service-container
+    image: auth-service
+    build: ./
+    restart: on-failure
+    ports:
+      - "8110:8110"
+
+networks:
+  default:
+    external:
+      name: ea-services-docker-network
+
+#Network: Make sure the network ea-services-docker-network is created and available:
+#docker network create ea-services-docker-network
