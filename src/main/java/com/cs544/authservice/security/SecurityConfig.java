@@ -29,25 +29,17 @@ public class SecurityConfig  {
     @Bean
     public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
         http
-                .csrf(csrf -> csrf.disable()) // Disabling csrf
-                .httpBasic(httpBasic -> httpBasic.disable()) // Disabling http basic
-                .cors(withDefaults()) // Enabling cors with default configuration
+                .csrf(csrf -> csrf.disable())
+                .httpBasic(httpBasic -> httpBasic.disable())
+                .cors(withDefaults())
                 .authorizeHttpRequests(auth -> auth
-                        .requestMatchers("/auth/**", "/actuator/**").permitAll() // Allows auth requests to be made without authentication
-                        .anyRequest().authenticated() // All other requests need to be authenticated
+                        .requestMatchers("/auth/**", "/actuator/**").permitAll()
+                        .anyRequest().authenticated()
                 )
-//                .userDetailsService(uds) // Setting the user details service to the custom implementation
-//                .exceptionHandling(exceptionHandling -> exceptionHandling
-//                        .authenticationEntryPoint(
-//                                (request, response, authException) ->
-//                                        response.sendError(HttpServletResponse.SC_UNAUTHORIZED, "Unauthorized")
-//                        )
-//                )
                 .sessionManagement(sessionManagement -> sessionManagement
-                        .sessionCreationPolicy(SessionCreationPolicy.STATELESS) // Setting Session to be stateless
+                        .sessionCreationPolicy(SessionCreationPolicy.STATELESS)
                 );
 
-        // Adding the JWT filter
         http.addFilterBefore(filter, UsernamePasswordAuthenticationFilter.class);
 
         return http.build();

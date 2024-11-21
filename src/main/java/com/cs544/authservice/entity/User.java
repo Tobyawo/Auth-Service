@@ -3,19 +3,19 @@ package com.cs544.authservice.entity;
 
 import lombok.Getter;
 import lombok.Setter;
-import org.hibernate.validator.constraints.Email;
-import org.springframework.stereotype.Component;
 
 import java.io.Serializable;
 import java.util.HashSet;
 import java.util.Set;
 
-@Component
 @Getter
 @Setter
-public class User extends IdBasedEntity implements Serializable {
+public class User implements Serializable {
+
     private static final long serialVersionUID = 1L;
-    @Email
+
+    protected Integer id;
+
     private String email;
 
     private String password;

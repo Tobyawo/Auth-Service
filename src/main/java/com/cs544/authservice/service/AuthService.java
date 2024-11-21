@@ -6,12 +6,9 @@ import com.cs544.authservice.client.HttpClient;
 import com.cs544.authservice.entity.User;
 import com.cs544.authservice.entity.request.LoggedInUser;
 import com.cs544.authservice.entity.response.LoginResponse;
-import com.cs544.authservice.producer.LoginEvent;
 import com.cs544.authservice.producer.LoginEventProducer;
 import com.cs544.authservice.security.JWTUtil;
 import lombok.extern.slf4j.Slf4j;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
@@ -20,7 +17,6 @@ import org.springframework.security.core.AuthenticationException;
 import org.springframework.stereotype.Service;
 
 import java.net.URISyntaxException;
-import java.time.LocalDateTime;
 
 
 @Service
@@ -65,15 +61,8 @@ public class AuthService {
             response.setToken(token);
             response.setLoggedInUser(loggedInUser);
 
-
-            LoginEvent loginEvent = new LoginEvent();
-            LocalDateTime now = LocalDateTime.now();
-            loginEvent.setLoginTime(now.toString());
-            loginEvent.setUsername(loggedInUser.email());
-            // Publish to Kafka
-            loginEventProducer.sendLoginEvent(loginEvent);
-
             return response;
+
         } catch (AuthenticationException authExc) {
             log.info("Authentication failed for {}", email, authExc);
             return new LoginResponse(ResponseCodeEnum.FAILED_AUTHENTICATION, "Invalid Login Credentials");

@@ -3,8 +3,7 @@ package com.cs544.authservice.security;
 import com.cs544.authservice.client.HttpClient;
 import com.cs544.authservice.entity.Role;
 import com.cs544.authservice.entity.User;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
@@ -21,6 +20,7 @@ import java.util.Set;
 
 
 @Component
+@Slf4j
 public class EAUserDetailsService implements UserDetailsService {
 
 
@@ -29,27 +29,24 @@ public class EAUserDetailsService implements UserDetailsService {
 
     private User userRes;
 
-    private static final Logger LOGGER = LoggerFactory.getLogger(EAUserDetailsService.class);
 
     @Override
     public UserDetails loadUserByUsername(String email) throws UsernameNotFoundException {
         try {
 
-            LOGGER.info("Trying to findUser with email = " + email);
+            log.info("Trying to findUser with email = " + email);
             userRes = client.fetchUser(email);
         } catch (URISyntaxException e) {
             throw new UsernameNotFoundException(e.getMessage());
         }
         // No user found
         if(userRes == null){
-            LOGGER.info("Could not findUser with email = " + email);
+            log.info("Could not findUser with email = " + email);
             throw new UsernameNotFoundException("Could not findUser with email = " + email);}
-        // Return a User Details object using the fetched User information
-//        User userLogin = userRes;
         return new org.springframework.security.core.userdetails.User(
                 email,
                 userRes.getPassword(),
-                getAuthorities()); // Sets the role of the found user
+                getAuthorities());
     }
 
 
